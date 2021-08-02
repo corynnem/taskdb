@@ -4,7 +4,6 @@ const db = require("./db");
 const app = Express();
 const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
-const swaggerJSDoc = require("swagger-jsdoc");
 
 const { employer, employee, team, task, project } = require("./controllers");
 const { validate, validateEmployer, cors } = require("./middlewares");
@@ -29,7 +28,7 @@ const options = {
       },
       {
         url: "comingsoon@heroku.app",
-      }
+      },
     ],
   },
   apis: ["*.js", "./controllers/*.js", "./models/*.js"],
@@ -39,10 +38,10 @@ const specs = swaggerJsdoc(options);
 app.use(
   "/api-docs",
   swaggerUi.serve,
-  swaggerUi.setup(specs, { explorer: true })
+  swaggerUi.setup(specs, { 
+    // explorer: true 
+  })
 );
-
-
 
 /**
  * @swagger
@@ -61,22 +60,17 @@ app.get("/test", (req, res) => {
   });
 });
 
-
-
 app.use("/8738", employer);
-app.use('/8739', employee)
+app.use("/8739", employee);
 
-app.use(validateEmployer)
-app.use('/5625', team)
-app.use('/5624', project)
+app.use(validateEmployer);
+app.use("/5625", team);
+app.use("/5624", project);
 
 app.use(validate);
-app.use('/7372', task)
-
+app.use("/7372", task);
 
 app.use("/static", Express.static("node_modules"));
-
-
 
 db.authenticate()
   .then(() => db.sync())

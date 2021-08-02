@@ -41,6 +41,9 @@ const db = require('../db')
  *         projectId: 
  *           type: integer
  *           description: id of the project associated to this task
+ *         employeeId: 
+ *           type: integer
+ *           description: id of the employee associated to this task
  *       example:
  *         id: 1
  *         name: a single task

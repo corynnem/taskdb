@@ -33,9 +33,3 @@ const db = require('../db')
 
 module.exports = Team;
 
-// get() {
-//     return this.getDataValue('members').split(';')
-// },
-// set(val) {
-//    this.setDataValue('members',val.join(';'));
-// },

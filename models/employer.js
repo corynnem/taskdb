@@ -17,6 +17,21 @@ const db = require('../db')
  *       example:
  *         message: "login success"
  *         token: K301NFDSJKL0392-143FDSNKL392N3M
+ *     EmployerLogin:
+ *       type: object
+ *       required: 
+ *          - email
+ *          - password
+ *       properties:
+ *         password:
+ *           type: string
+ *           description: Your secure password.
+ *         email:
+ *           type: string
+ *           description: Your email address.
+ *       example:
+ *         email: candycanejane@candycanelane.com
+ *         password: gumdropjoe2n0w
  *     Employer:
  *       type: object
  *       required:

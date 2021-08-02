@@ -72,7 +72,7 @@ employercontroller.post('/register', async (req, res) => {
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Employer'
+ *             $ref: '#/components/schemas/EmployerLogin'
  *     responses:
  *       200:
  *         description: "login success"

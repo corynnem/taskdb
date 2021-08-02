@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const { toUnicode } = require('punycode');
-const { project } = require('.');
+const { project, employee } = require('.');
 const { Task } = require('../models');
 
 let taskcontroller
@@ -30,7 +30,7 @@ let taskcontroller
 
 taskcontroller
 .post('/new', async(req, res) => {
-    const { name, description, deadline, endGoal, assignedBy, completed, projectId } = req.body;
+    const { name, description, deadline, endGoal, assignedBy, completed, projectId, employeeId } = req.body;
       try {
           let newTask = await Task.create({
               name,
@@ -40,7 +40,8 @@ taskcontroller
               assignedBy,
               completed,
               employerId: req.user.id,
-              projectId
+              projectId,
+              employeeId
           })
 
           res.json({
@@ -84,7 +85,7 @@ taskcontroller
 
 
  taskcontroller.put('/:id', async (req, res) => {
-  const { name, description, deadline, endGoal, assignedBy, completed, projectId } = req.body;
+  const { name, description, deadline, endGoal, assignedBy, completed, projectId, employeeId } = req.body;
 
   try {
 
@@ -103,6 +104,7 @@ taskcontroller
       toUpdate.assignedBy = assignedBy;
       toUpdate.completed = completed;
       toUpdate.projectId = projectId
+      toUpdate.employeeId = employeeId
       
       await toUpdate.save();
       
@@ -142,7 +144,7 @@ taskcontroller.delete('/:id', async (req, res) => {
       const taskToRemove = await Task.findOne({
         where: {
           id: req.params.id,
-          employerId: req.user.id,
+          employerId: req.user.id
         },
       });
       taskToRemove

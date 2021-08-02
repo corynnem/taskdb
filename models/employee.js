@@ -17,7 +17,7 @@ const db = require('../db')
  *       properties:
  *         id:
  *           type: integer
- *           description: The Auto-generated id of a new Employer
+ *           description: The auto-generated id of a new Employer
  *         email:
  *           type: string
  *           description: Your email address.

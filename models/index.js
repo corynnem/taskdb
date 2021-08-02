@@ -20,6 +20,9 @@ Task.belongsTo(Employer)
 Project.hasMany(Task)
 Task.belongsTo(Project)
 
+Employee.hasMany(Task)
+Task.belongsTo(Employee)
+
 
 
 
