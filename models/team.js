@@ -32,4 +32,3 @@ const db = require('../db')
 });
 
 module.exports = Team;
-
