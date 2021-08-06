@@ -17,7 +17,7 @@ const db = require('../db')
  *       properties:
  *         id:
  *           type: integer
- *           description: The auto-generated id of a new Employer
+ *           description: The auto-generated id of a new employer
  *         email:
  *           type: string
  *           description: Your email address.
@@ -36,10 +36,10 @@ const db = require('../db')
  *           description: Your positon as specified by your employer.
  *       example:
  *         id: 1
- *         email: candycanejane@candycanelane.com
- *         firstName: candy
- *         lastName: jane
- *         password: gumdropjoe2n0w
+ *         email: example@example.com
+ *         firstName: John
+ *         lastName: Dough
+ *         password: "123456"
  *         position: sales associate
  *
  */

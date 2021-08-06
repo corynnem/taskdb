@@ -16,6 +16,8 @@ const employeecontroller = Router();
  *   post:
  *     summary: Someone with an "employer" token can register a user and returns a message of "employee registered" 
  *     tags: [Employee]
+ *     security: 
+ *       - EmployerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -66,14 +68,14 @@ employeecontroller.post('/register', validateEmployer, async (req, res) => {
  * @swagger
  * /8739/login:
  *   post:
- *     summary: returns a message of "login success" 
+ *     summary:  Someone with an the credentials of an existing employee can login to said employee's account
  *     tags: [Employee]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Employee'
+ *             $ref: '#/components/schemas/EmployerLogin'
  *     responses:
  *       200:
  *         description: "login success"
@@ -120,6 +122,8 @@ employeecontroller.post('/login', async (req, res) => {
  *   get:
  *     summary: Someone with an "employer" token can get a list of all employees
  *     tags: [Employee]
+ *     security: 
+ *       - EmployerAuth: []
  *     responses:
  *       200:
  *         description: Will return an array of user objects if successful
@@ -160,12 +164,16 @@ employeecontroller.post('/login', async (req, res) => {
 
 
 
+
+
 /**
  * @swagger
- * /8739/:id:
+ * /8739/1:
  *   delete:
  *     summary: Someone with an "employer" token can delete employee by employeeId 
  *     tags: [Employee]
+ *     security: 
+ *       - EmployerAuth: []
  *     responses:
  *       200:
  *         description: "removed employee successfully"

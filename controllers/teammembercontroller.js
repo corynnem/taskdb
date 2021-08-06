@@ -1,16 +1,16 @@
 const { Router } = require('express');
-const { Team, Project, Task } = require('../models');
+const { TeamMember, Employee } = require('../models');
 
-let teamcontroller = Router();
+let teammembercontroller = Router();
 
 
 
 /**
  * @swagger
- * /5625/new:
+ * /5626/new:
  *   post:
- *     summary: Someone with an "employer" token can create a new team
- *     tags: [Team]
+ *     summary: Someone with an "employer" token can create a new team member
+ *     tags: [TeamMember]
  *     security: 
  *       - EmployerAuth: []
  *     requestBody:
@@ -18,70 +18,66 @@ let teamcontroller = Router();
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Team'
+ *             $ref: '#/components/schemas/TeamMember'
  *     responses:
  *       200:
  *         description: "user registered"
  *       500:
- *         description: 'failed to create item'
+ *         description: 'failed to add team member'
  */
 
 
-teamcontroller.post('/new', async(req, res) => {
+teammembercontroller.post('/new', async(req, res) => {
     const { name, employeeId } = req.body;
       try {
-          let newTeam = await Team.create({
+          let newTeamMember = await TeamMember.create({
               name,
               employerId: req.user.id,
               employeeId
           })
           res.json({
-              message: "Team created",
-              members: newTeam
+              message: "Team member created",
+              members: newTeamMember
           })
       } catch{
         res.status(500).json({
-            message: "failed to create team",
+            message: "failed to create team member",
           });
       }
-
 })
 
 
 
 /**
  * @swagger
- * /5625/all:
+ * /5626/all:
  *   get:
- *     summary: Someone with an "employer" token can get a list of all Teams
- *     tags: [Team]
+ *     summary: Someone with an "employer" token can get a list of all team members
+ *     tags: [TeamMember]
  *     security: 
  *       - EmployerAuth: []
  *     responses:
  *       200:
- *         description: Will return an array of team objects, including projects and tasks associated with them
+ *         description: Will return an array of team member objects
  *       500:
- *          description: "no users found or failed to get users"
+ *          description: "no members found or failed to get team members"
  * 
  */ 
 
 
-teamcontroller.get("/all", async (req, res) => {
+teammembercontroller.get("/all", async (req, res) => {
     try {
-      let allProjects = await Team.findAll({
+      let allTeamMembers = await TeamMember.findAll({
           include: [{
-              model: Project,
-              as: 'projects',
-              include: [{
-                model: Task
-              }]
+              model: Employee,
+              as: 'employees',
           }],
           where: {
             employerId: req.user.id
           }
       });
       res.json({
-        teams: allProjects,
+        teams: allTeamMembers,
       });
     } catch (e) {
       res.status(500).json({
@@ -96,10 +92,10 @@ teamcontroller.get("/all", async (req, res) => {
 
 /**
  * @swagger
- * /5625/1:
+ * /5626/1:
  *   put:
- *     summary: Someone with an "employer" token can update a teams information 
- *     tags: [Team]
+ *     summary: Someone with an "employer" token can update a team member information by id  
+ *     tags: [TeamMember]
  *     security: 
  *       - EmployerAuth: []
  *     requestBody:
@@ -107,25 +103,25 @@ teamcontroller.get("/all", async (req, res) => {
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Team'
+ *             $ref: '#/components/schemas/TeamMember'
  *     responses:
  *       200:
  *         description: "updated successfully"
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Team'
+ *               $ref: '#/components/schemas/TeamMember'
  *       409:
  *         description: 'required fields missing, team not found, or team is unauthorized to edit'
  *       500:
  *         description: 'failed to update team'
  */
 
-teamcontroller.put('/:id', async (req, res) => {
-  let { name, employeeId } = req.body;
+teammembercontroller.put('/:id=', async (req, res) => {
+  let { name } = req.body;
   console.log(name, req.user.id)
   try {
-    const toUpdate = await Team.findOne({
+    const toUpdate = await TeamMember.findOne({
       where: {
         id: req.params.id,
         employerId: req.user.id,
@@ -137,12 +133,12 @@ teamcontroller.put('/:id', async (req, res) => {
       await toUpdate.save();
       
       res.status(200).json({
-        message: "updated team info successfully",
+        message: "updated team member info successfully",
       });
     } else {
       res.status(404).json({
         message:
-          "required fields missing, team not found, or team is unauthorized to edit",
+          "required fields missing, team not found, or employer is unauthorized to edit",
       });
     }
   } catch (e) {
@@ -159,10 +155,10 @@ teamcontroller.put('/:id', async (req, res) => {
 
 /**
  * @swagger
- * /5625/1:
+ * /5626/1:
  *   delete:
- *     summary: Someone with an "employer" token can delete teams by id
- *     tags: [Team]
+ *     summary: Someone with an "employer" token can delete team members by id
+ *     tags: [TeamMember]
  *     security: 
  *       - EmployerAuth: []
  *     responses:
@@ -172,9 +168,9 @@ teamcontroller.put('/:id', async (req, res) => {
  *          description: "team not found, or does not belong to user or failed to remove team"
  * 
  */ 
-  teamcontroller.delete('/:id', async (req, res) => {
+  teammembercontroller.delete('/:id', async (req, res) => {
     try {
-      const teamToRemove = await Team.findOne({
+      const teamToRemove = await TeamMember.findOne({
         where: {
           id: req.params.id,
           employerId: req.user.id,
@@ -183,7 +179,7 @@ teamcontroller.put('/:id', async (req, res) => {
       teamToRemove
         ? teamToRemove.destroy()
         : res.status(404).json({
-            message: "team not found, or does not belong to user",
+            message: "team not found, or does not belong to employer",
           });
       res.status(200).json({
         message: "removed team successfully",
@@ -198,4 +194,4 @@ teamcontroller.put('/:id', async (req, res) => {
 
 
 
-module.exports = teamcontroller
+module.exports = teammembercontroller

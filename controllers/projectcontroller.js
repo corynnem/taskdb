@@ -10,6 +10,8 @@ let projectcontroller = Router();
  *   post:
  *     summary: Someone with an "employer" token can create a new project
  *     tags: [Project]
+ *     security: 
+ *       - EmployerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -53,6 +55,8 @@ projectcontroller.post("/new", async (req, res) => {
  *   get:
  *     summary: Someone with an "employer" token can get projects for user and associated tasks with each of them
  *     tags: [Project]
+ *     security: 
+ *       - EmployerAuth: []
  *     responses:
  *       200:
  *         description: Will return an array of project objects, including tasks associated with them
@@ -85,10 +89,12 @@ projectcontroller.get("/all", async (req, res) => {
 
 /**
  * @swagger
- * /5624/:id:
+ * /5624/1:
  *   put:
  *     summary: Someone with an "employer" token can edit project information 
  *     tags: [Project]
+ *     security: 
+ *       - EmployerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -151,10 +157,12 @@ projectcontroller.get("/all", async (req, res) => {
 
 /**
  * @swagger
- * /5624/:id:
+ * /5624/1:
  *   delete:
  *     summary: Someone with an "employer" token can delete project by projectId 
  *     tags: [Project]
+ *     security: 
+ *       - EmployerAuth: []
  *     responses:
  *       200:
  *         description: "removed project successfully"

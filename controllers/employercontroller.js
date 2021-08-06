@@ -52,7 +52,7 @@ employercontroller.post('/register', async (req, res) => {
             });
         } else {
             res.status(500).json({
-                message: 'failed to register users'
+                message: 'failed to register employer'
             })
         }
     }
@@ -113,12 +113,16 @@ employercontroller.post('/login', async (req, res) => {
 })
 
 
+
+
 /**
  * @swagger
  * /8738/all:
  *   get:
- *     summary: returns a list of all employers/companies
+ *     summary: returns a list of all employers andompanies
  *     tags: [Employer]
+ *     security: 
+ *       - EmployerAuth: []
  *     responses:
  *       200:
  *         description: Will return an array of user objects if successful
@@ -158,7 +162,7 @@ employercontroller.post('/login', async (req, res) => {
 
 /**
  * @swagger
- * /8738/:id:
+ * /8738/1:
  *   delete:
  *     summary: deletes employer by employerId 
  *     tags: [Employer]

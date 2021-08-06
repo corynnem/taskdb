@@ -14,6 +14,8 @@ let taskcontroller
  *   post:
  *     summary: Employer can create a new task
  *     tags: [Task]
+ *     security: 
+ *       - EmployerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -60,10 +62,13 @@ taskcontroller
 
 /**
  * @swagger
- * /7372/:id:
+ * /7372/1:
  *   put:
  *     summary: Someone with an "employer" or "employee" token can update a task
  *     tags: [Task]
+ *     security: 
+ *       - EmployerAuth: []
+ *       - EmployeeAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -128,10 +133,12 @@ taskcontroller
 
 /**
  * @swagger
- * /7372/:id:
+ * /7372/1:
  *   delete:
  *     summary: Someone with an "employer" token can delete tasks by id
  *     tags: [Task]
+ *     security: 
+ *       - EmployerAuth: []
  *     responses:
  *       200:
  *         description: "removed task successfully"

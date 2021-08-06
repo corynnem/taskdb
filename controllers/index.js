@@ -3,5 +3,6 @@ module.exports = {
     employee: require('./employeecontroller'),
     team: require('./teamcontroller'),
     task: require('./taskcontroller'),
-    project: require('./projectcontroller')
+    project: require('./projectcontroller'),
+    teammember: require('./teammembercontroller')
 }

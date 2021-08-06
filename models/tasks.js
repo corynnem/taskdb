@@ -51,7 +51,9 @@ const db = require('../db')
  *         deadline: 09.16.21
  *         endGoal: Product to be completed in alloted time, as requested by company
  *         assignedBy: Name of person who assigned said task
+ *         completed: false
  *         projectId: 3
+ *         employeeId: 1
  */
 
 

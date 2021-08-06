@@ -30,8 +30,8 @@ const db = require('../db')
  *           type: string
  *           description: Your email address.
  *       example:
- *         email: candycanejane@candycanelane.com
- *         password: gumdropjoe2n0w
+ *         email: example@example.com
+ *         password: "123456"
  *     Employer:
  *       type: object
  *       required:
@@ -65,10 +65,10 @@ const db = require('../db')
  *           description: Your designated key to create an account.
  *       example:
  *         id: 1
- *         email: candycanejane@candycanelane.com
- *         firstName: candy
- *         lastName: jane
- *         password: gumdropjoe2n0w
+ *         email: example@example.com
+ *         firstName: Jane
+ *         lastName: Dough
+ *         password: '123456'
  *         position: manager
  *         key: specialkey123
  *
