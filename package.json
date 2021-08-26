@@ -11,6 +11,9 @@
   "dependencies": {
     "bcrypt": "^5.0.1",
     "dotenv": "^10.0.0",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.6",
+    "enzyme-to-json": "^3.6.2",
     "express": "^4.17.1",
     "gitignore": "^0.7.0",
     "jsonwebtoken": "^8.5.1",

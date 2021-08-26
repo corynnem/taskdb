@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const { Employer } = require('../models');
 
 const validateEmployer = (req, res, next) => {
+  console.log(req.headers.authorization)
   if (req.method === 'OPTIONS') {
     return next();
   } else if (req.headers.authorization && req.headers.authorization.includes('Bearer')) {
