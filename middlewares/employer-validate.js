@@ -26,7 +26,7 @@ const validateEmployer = (req, res, next) => {
     }
   } else {
     res.status(401).json({
-      message: 'Not allowed 2'
+      message: 'No Employer Authorization'
     });
   }
 }
