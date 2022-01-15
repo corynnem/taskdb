@@ -8,6 +8,7 @@ const validate = (req, res, next) => {
     const { authorization } = req.headers;
     const payload = authorization ? jwt.verify(authorization.includes('Bearer') ? authorization.split(' ')[1] : authorization, process.env.JWT_SECRET): undefined;
     console.log(payload)
+  
     if (payload) {
       Employee.findOne({
         where: {

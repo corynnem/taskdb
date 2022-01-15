@@ -27,7 +27,7 @@ const options = {
         url: "http://localhost:8070",
       },
       {
-        url: "comingsoon@heroku.app",
+        url: "https://task-database-app.herokuapp.com/",
       },
     ]
   },
