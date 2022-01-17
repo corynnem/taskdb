@@ -61,7 +61,7 @@ teamcontroller.post('/new', async(req, res) => {
  *       200:
  *         description: Will return an array of team objects, including projects and tasks associated with them
  *       500:
- *          description: "no users found or failed to get users"
+ *          description: "no teams found or failed to get teams"
  * 
  */ 
 
