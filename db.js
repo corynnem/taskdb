@@ -7,7 +7,12 @@ const db = new Sequelize(
     )}@localhost:5432/tasks`,
   { 
       dialect: "postgres",
-      ssl: process.env.ENVIRONMENT === 'production'
+      dialectOptions: {
+        ssl: {
+          require: true, 
+          rejectUnauthorized: false,t
+        }
+      }
   },
 
 );
