@@ -95,7 +95,7 @@ employercontroller.post('/login', async (req, res) => {
         })
 
         if( loggingIn && await bcrypt.compare(password, loggingIn.password)) {
-            const token = jwt.sign({ id: loggingIn.id }, process.env.JWT_SECRET);
+            const token = jwt.sign({ id: loggingIn.id, role: 'employer' }, process.env.JWT_SECRET, { expiresIn: '24h' });
                     res.status(200).json({
                         message: 'login success',
                         token
@@ -135,9 +135,11 @@ employercontroller.post('/login', async (req, res) => {
  */ 
 
 
- employercontroller.get('/all', async (req, res) => {
+ employercontroller.get('/all', validateEmployer, async (req, res) => {
     try {
-        let foundUsers = await Employer.findAll()
+        let foundUsers = await Employer.findAll({
+            attributes: { exclude: ['password', 'key'] }
+        })
         if(foundUsers){
         res.json({
             employers: foundUsers

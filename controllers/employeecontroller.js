@@ -35,7 +35,6 @@ const employeecontroller = Router();
 
 employeecontroller.post('/register', validateEmployer, async (req, res) => {
     let { email, firstName, lastName, password, position } = req.body;
-    console.log(req.user.id)
     try {
         await Employee.create({
             email,
@@ -98,7 +97,7 @@ employeecontroller.post('/login', async (req, res) => {
         })
 
         if( loggingIn && await bcrypt.compare(password, loggingIn.password)) {
-            const token = jwt.sign({ id: loggingIn.id }, process.env.JWT_SECRET);
+            const token = jwt.sign({ id: loggingIn.id, role: 'employee' }, process.env.JWT_SECRET, { expiresIn: '24h' });
                     res.status(200).json({
                         message: 'login success',
                         token
@@ -140,6 +139,7 @@ employeecontroller.post('/login', async (req, res) => {
      
     try {
         let foundEmployees = await Employee.findAll({
+            attributes: { exclude: ['password'] },
             where: {
                 employerId: req.user.id
             }
@@ -185,6 +185,7 @@ employeecontroller.post('/login', async (req, res) => {
       const employeeToRemove = await Employee.findOne({
         where: {
           id: req.params.id,
+          employerId: req.user.id,
         },
       });
       employeeToRemove

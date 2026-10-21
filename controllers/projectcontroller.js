@@ -1,5 +1,12 @@
 const { Router } = require("express");
-const { Project, Task } = require("../models");
+const { Project, Task, Team } = require("../models");
+
+// Projects belong to an employer through their team.
+const ownedBy = (employerId) => ({
+  model: Team,
+  where: { employerId },
+  attributes: [],
+});
 
 
 let projectcontroller = Router();
@@ -28,6 +35,15 @@ let projectcontroller = Router();
 projectcontroller.post("/new", async (req, res) => {
   const { name, description, deadline, endGoal, budget, teamId } = req.body;
   try {
+    const team = await Team.findOne({
+      where: { id: teamId, employerId: req.user.id },
+    });
+    if (!team) {
+      return res.status(404).json({
+        message: "team not found, or does not belong to employer",
+      });
+    }
+
     let newProject = await Project.create({
       name,
       description,
@@ -71,7 +87,7 @@ projectcontroller.get("/all", async (req, res) => {
     let allProjects = await Project.findAll({
         include: [{
             model: Task,
-        }],
+        }, ownedBy(req.user.id)],
     });
     res.json({
       projects: allProjects,
@@ -119,16 +135,19 @@ projectcontroller.get("/all", async (req, res) => {
 
  projectcontroller.put('/:id', async (req, res) => {
   const { name, description, deadline, endGoal, budget, teamId } = req.body;
-      console.log(name, description, deadline, endGoal, budget, teamId, req.params.id, req.user.id)
   try {
 
     const toUpdate = await Project.findOne({
       where: {
         id: req.params.id,
       },
+      include: [ownedBy(req.user.id)],
+    });
+    const newTeam = await Team.findOne({
+      where: { id: teamId, employerId: req.user.id },
     });
 
-    if (toUpdate && name) {
+    if (toUpdate && newTeam && name) {
       toUpdate.name = name; 
       toUpdate.description = description;
       toUpdate.deadline = deadline;
@@ -176,6 +195,7 @@ projectcontroller.get("/all", async (req, res) => {
       where: {
         id: req.params.id,
       },
+      include: [ownedBy(req.user.id)],
     });
     projectToRemove
       ? projectToRemove.destroy()

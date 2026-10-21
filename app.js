@@ -6,7 +6,7 @@ const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 
 const { employer, employee, team, task, project, teammember } = require("./controllers");
-const { validate, validateEmployer, cors } = require("./middlewares");
+const { validateEmployer, cors } = require("./middlewares");
 
 app.use(Express.json());
 app.use(cors);
@@ -68,7 +68,6 @@ app.use("/5626", teammember);
 app.use("/5625", team);
 app.use("/5624", project);
 
-app.use(validate);
 app.use("/7372", task);
 
 app.use("/static", Express.static("node_modules"));

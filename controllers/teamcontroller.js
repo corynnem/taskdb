@@ -123,7 +123,6 @@ teamcontroller.get("/all", async (req, res) => {
 
 teamcontroller.put('/:id', async (req, res) => {
   let { name, employeeId } = req.body;
-  console.log(name, req.user.id)
   try {
     const toUpdate = await Team.findOne({
       where: {
