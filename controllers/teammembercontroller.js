@@ -117,7 +117,7 @@ teammembercontroller.get("/all", async (req, res) => {
  *         description: 'failed to update team'
  */
 
-teammembercontroller.put('/:id=', async (req, res) => {
+teammembercontroller.put('/:id', async (req, res) => {
   let { name } = req.body;
   try {
     const toUpdate = await TeamMember.findOne({
@@ -175,11 +175,12 @@ teammembercontroller.put('/:id=', async (req, res) => {
           employerId: req.user.id,
         },
       });
-      teamToRemove
-        ? teamToRemove.destroy()
-        : res.status(404).json({
-            message: "team not found, or does not belong to employer",
-          });
+      if (!teamToRemove) {
+        return res.status(404).json({
+          message: "team not found, or does not belong to employer",
+        });
+      }
+      await teamToRemove.destroy();
       res.status(200).json({
         message: "removed team successfully",
       });

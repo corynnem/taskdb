@@ -197,11 +197,12 @@ projectcontroller.get("/all", async (req, res) => {
       },
       include: [ownedBy(req.user.id)],
     });
-    projectToRemove
-      ? projectToRemove.destroy()
-      : res.status(404).json({
-          message: "project not found, or does not belong to user",
-        });
+    if (!projectToRemove) {
+      return res.status(404).json({
+        message: "project not found, or does not belong to user",
+      });
+    }
+    await projectToRemove.destroy();
     res.status(200).json({
       message: "removed project successfully",
     });

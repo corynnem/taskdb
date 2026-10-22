@@ -1,5 +1,27 @@
 const { Router } = require('express');
-const { Task } = require('../models');
+const { Task, Project, Team, Employee } = require('../models');
+
+// A task's project and employee, when given, must belong to the employer.
+const ownsTaskRefs = async (employerId, projectId, employeeId) => {
+  if (projectId) {
+    const project = await Project.findOne({
+      where: { id: projectId },
+      include: [{ model: Team, where: { employerId }, attributes: [] }],
+    });
+    if (!project) return false;
+  }
+  if (employeeId) {
+    const employee = await Employee.findOne({
+      where: { id: employeeId, employerId },
+    });
+    if (!employee) return false;
+  }
+  return true;
+};
+
+const refsNotFound = {
+  message: "project or employee not found, or does not belong to employer",
+};
 
 let taskcontroller
  = Router();
@@ -32,6 +54,9 @@ taskcontroller
 .post('/new', async(req, res) => {
     const { name, description, deadline, endGoal, assignedBy, completed, projectId, employeeId } = req.body;
       try {
+          if (!await ownsTaskRefs(req.user.id, projectId, employeeId)) {
+            return res.status(404).json(refsNotFound);
+          }
           let newTask = await Task.create({
               name,
               description,
@@ -99,6 +124,10 @@ taskcontroller
       },
     });
 
+    if (toUpdate && name && !await ownsTaskRefs(req.user.id, projectId, employeeId)) {
+      return res.status(404).json(refsNotFound);
+    }
+
     if (toUpdate && name) {
       toUpdate.name = name; 
       toUpdate.description = description;
@@ -152,11 +181,12 @@ taskcontroller.delete('/:id', async (req, res) => {
           employerId: req.user.id
         },
       });
-      taskToRemove
-        ? taskToRemove.destroy()
-        : res.status(404).json({
-            message: "task not found, or does not belong to user",
-          });
+      if (!taskToRemove) {
+        return res.status(404).json({
+          message: "task not found, or does not belong to user",
+        });
+      }
+      await taskToRemove.destroy();
       res.status(200).json({
         message: "removed task successfully",
       });

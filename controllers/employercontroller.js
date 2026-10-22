@@ -181,11 +181,12 @@ employercontroller.post('/login', async (req, res) => {
           id: req.user.id,
         },
       });
-      employerToRemove
-        ? employerToRemove.destroy()
-        : res.status(404).json({
-            message: "employer not found, or does not belong to user",
-          });
+      if (!employerToRemove) {
+        return res.status(404).json({
+          message: "employer not found, or does not belong to user",
+        });
+      }
+      await employerToRemove.destroy();
       res.status(200).json({
         message: "removed employer successfully",
       });

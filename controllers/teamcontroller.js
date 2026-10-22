@@ -179,11 +179,12 @@ teamcontroller.put('/:id', async (req, res) => {
           employerId: req.user.id,
         },
       });
-      teamToRemove
-        ? teamToRemove.destroy()
-        : res.status(404).json({
-            message: "team not found, or does not belong to user",
-          });
+      if (!teamToRemove) {
+        return res.status(404).json({
+          message: "team not found, or does not belong to user",
+        });
+      }
+      await teamToRemove.destroy();
       res.status(200).json({
         message: "removed team successfully",
       });
