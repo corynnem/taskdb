@@ -119,7 +119,6 @@ teammembercontroller.get("/all", async (req, res) => {
 
 teammembercontroller.put('/:id=', async (req, res) => {
   let { name } = req.body;
-  console.log(name, req.user.id)
   try {
     const toUpdate = await TeamMember.findOne({
       where: {
