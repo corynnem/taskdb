@@ -27,7 +27,7 @@ const options = {
         url: "http://localhost:8888",
       },
       {
-        url: "https://task-database-app.herokuapp.com/",
+        url: "https://taskdb-7y7d.onrender.com",
       },
     ]
   },
@@ -76,13 +76,19 @@ app.use("/static", Express.static("node_modules"));
 
 
 
+const PORT = process.env.PORT || 8888;
+
 db.authenticate()
   .then(() => db.sync())
   // .then(() => db.sync({force: true}))
   .then(() =>
-    app.listen(process.env.PORT, () => {
-      console.log(`[taskdb-server]: app listening on ${process.env.PORT}`);
+    app.listen(PORT, () => {
+      console.log(`[taskdb-server]: app listening on ${PORT}`);
     })
-  );
+  )
+  .catch((err) => {
+    console.error("[taskdb-server]: failed to start:", err.message);
+    process.exit(1);
+  });
 
 module.exports = app;
